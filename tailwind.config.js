@@ -1,36 +1,13 @@
 const plugin = require("tailwindcss/plugin");
 
 module.exports = {
-  mode: "jit",
-  purge: {
-    content: ["./src/**/*.{js,ts,jsx,tsx,mdx,vue}"],
-  },
-  theme: { extend: {} },
-  variants: {},
-  plugins: [
-    plugin(function ({ addVariant, e, postcss }) {
-      addVariant("firefox", ({ container, separator }) => {
-        const isFirefoxRule = postcss.atRule({
-          name: "-moz-document",
-          params: "url-prefix()",
-        });
-        isFirefoxRule.append(container.nodes);
-        container.append(isFirefoxRule);
-        isFirefoxRule.walkRules((rule) => {
-          rule.selector = `.${e(
-            `firefox${separator}${rule.selector.slice(1)}`
-          )}`;
-        });
-      });
-    }),
+  content: [
+    "./public/**/*.html",
+    "./src/**/*.{js,ts,jsx,tsx,mdx,vue}",
   ],
-};
 
-module.exports = {
-  purge: {
-    content: ["./public/**/*.html"],
-  },
-  darkMode: "class", // or 'media' or 'class'
+  darkMode: "class",
+
   theme: {
     extend: {
       fontFamily: {
@@ -53,7 +30,22 @@ module.exports = {
       },
     },
   },
-  variants: {
-    extend: {},
-  },
+
+  plugins: [
+    plugin(function ({ addVariant, e, postcss }) {
+      addVariant("firefox", ({ container, separator }) => {
+        const isFirefoxRule = postcss.atRule({
+          name: "-moz-document",
+          params: "url-prefix()",
+        });
+        isFirefoxRule.append(container.nodes);
+        container.append(isFirefoxRule);
+        isFirefoxRule.walkRules((rule) => {
+          rule.selector = `.${e(
+            `firefox${separator}${rule.selector.slice(1)}`
+          )}`;
+        });
+      });
+    }),
+  ],
 };
